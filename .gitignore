@@ -1,0 +1,22 @@
+# 视频文件
+video/
+demo/
+*.mp4
+samples/
+.idea/
+*.pyc
+#
+opencv_pose/
+#权重文件
+pre_train_model/
+light_pose_checkpoints/
+*.pth
+
+# 标签json文件
+*.json
+#pkl文件
+*.kpl
+
+detections.json
+prepared_train_annotation.pkl
+val_subset.json
