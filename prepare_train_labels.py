@@ -87,6 +87,10 @@ def prepare_annotations(annotations_per_image, images_info, net_input_size):
 
 
 if __name__ == '__main__':
+    """
+    将数据集标注文件从json格式转换为kpl
+    长度为132021的
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('--labels', type=str, default='D:/DATASET/COCO2017/annotations/person_keypoints_train2017.json', help='path to json with keypoints train labels')
     parser.add_argument('--output-name', type=str, default='prepared_train_annotation.pkl',
@@ -122,3 +126,5 @@ if __name__ == '__main__':
 
     with open(args.output_name, 'wb') as f:
         pickle.dump(prepared_annotations, f)
+    with open(args.output_name, 'rb') as f:
+        print(pickle.load(f))

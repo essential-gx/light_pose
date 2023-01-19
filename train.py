@@ -1,3 +1,4 @@
+import imp
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -23,8 +24,28 @@ cv2.ocl.setUseOpenCL(False)  # To prevent freeze of DataLoader
 def train(prepared_train_labels, train_images_folder, num_refinement_stages, base_lr, batch_size, batches_per_iter,
           num_workers, checkpoint_path, weights_only, checkpoints_folder, log_after,
           val_labels, val_images_folder, val_output_name, checkpoint_after, val_after):
+    '''
+    
+    :param prepared_train_labels:训练集标注文件
+    :param train_images_folder:训练集目录
+    :param num_refinement_stages:细化阶段数
+    :param base_lr:初始学习率
+    :param batch_size:批量大小
+    :param batches_per_iter:要从中累积梯度的批次数
+    :param num_workers: 线程数
+    :param checkpoint_path:
+    :param weights_only:
+    :param checkpoints_folder:
+    :param log_after:
+    :param val_labels:
+    :param val_images_folder:
+    :param val_output_name:
+    :param checkpoint_after:
+    :param val_after:
+    :return:
+    '''
     net = PoseEstimationWithMobileNet(num_refinement_stages)
-
+    
     stride = 8
     sigma = 7
     path_thickness = 1
@@ -132,8 +153,8 @@ if __name__ == '__main__':
     parser.add_argument('--batch-size', type=int, default=8, help='batch size')
     parser.add_argument('--batches-per-iter', type=int, default=1, help='number of batches to accumulate gradient from')
     parser.add_argument('--num-workers', type=int, default=8, help='number of workers')
-    parser.add_argument('--checkpoint-path', type=str, default='./pre_train_model/light_pose-20210519.pth', help='path to the checkpoint to continue training from')
-    # parser.add_argument('--checkpoint-path', type=str, default='', help='path to the checkpoint to continue training from')
+    # parser.add_argument('--checkpoint-path', type=str, default='./pre_train_model/light_pose-20210519.pth', help='path to the checkpoint to continue training from')
+    parser.add_argument('--checkpoint-path', type=str, default='', help='path to the checkpoint to continue training from')
 
     parser.add_argument('--weights-only', type=bool,default=True,
                         help='just initialize layers with pre-trained weights and start training from the beginning')
