@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 import torch
 import time
-from models.with_mobilenet import PoseEstimationWithMobileNet
+from models.pose_model import PoseEstimationModel
 from modules.keypoints import extract_keypoints, group_keypoints
 from modules.load_state import load_state
 from modules.pose import Pose, track_poses
@@ -65,7 +65,7 @@ class light_pose_model(object):
         self.track = track
         self.smooth = smooth
 
-        self.net = PoseEstimationWithMobileNet()
+        self.net = PoseEstimationModel(use_ViT=False)
 
         checkpoint = torch.load(self.model_path, map_location='cpu')
 
@@ -183,7 +183,8 @@ def draw_one_pose(img,keypoints,color_x = [255, 0, 0]):
             cv2.line(img, (int(x_a), int(y_a)), (int(x_b), int(y_b)), color_x, 2)
 
 if __name__ == '__main__':
-    video_path = "./video/demo_05.mp4" # 加载视频
+    video_path = "./files/video/yongchun.mp4" # 加载视频
+    inference_path = "./files/inference_video"
     # video_path = 0 # 加载相机
     model_path = "./pre_train_model/light_pose-20210519.pth"
 
@@ -191,7 +192,7 @@ if __name__ == '__main__':
     print("load:{}".format(model_path))
     video_capture = cv2.VideoCapture(video_path)
 
-    flag_write_video = True # 是否记录推理 demo 视频
+    flag_write_video = True # 是否记录推理 inference_video 视频
     print('flag_write_video',flag_write_video)
     flag_video_start = False
     video_writer = None
@@ -203,7 +204,8 @@ if __name__ == '__main__':
             if flag_video_start == False  and flag_write_video:
                 loc_time = time.localtime()
                 str_time = time.strftime("%Y-%m-%d_%H-%M-%S", loc_time)
-                video_writer = cv2.VideoWriter("./demo/demo_{}.mp4".format(str_time), cv2.VideoWriter_fourcc(*"mp4v"), fps=24, frameSize=(int(im0.shape[1]), int(im0.shape[0])))
+                video_writer = cv2.VideoWriter("{}/demo_{}.mp4".format(inference_path,str_time),
+                                               cv2.VideoWriter_fourcc(*"mp4v"), fps=24, frameSize=(int(im0.shape[1]), int(im0.shape[0])))
                 flag_video_start = True
 
             pose_dict = model_pose.predict(im0.copy())

@@ -1,4 +1,3 @@
-import imp
 import os
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
@@ -13,7 +12,7 @@ from torchvision import transforms
 from datasets.coco import CocoTrainDataset
 from datasets.transformations import ConvertKeypoints, Scale, Rotate, CropPad, Flip
 from modules.get_parameters import get_parameters_conv, get_parameters_bn, get_parameters_conv_depthwise
-from models.with_mobilenet import PoseEstimationWithMobileNet
+from models.pose_model import PoseEstimationModel
 from modules.loss import l2_loss
 from modules.load_state import load_state
 from val import evaluate
@@ -44,7 +43,7 @@ def train(prepared_train_labels, train_images_folder, num_refinement_stages, bas
     :param val_after:
     :return:
     '''
-    net = PoseEstimationWithMobileNet(num_refinement_stages)
+    net = PoseEstimationModel(num_refinement_stages)
     
     stride = 8
     sigma = 7
@@ -166,10 +165,8 @@ if __name__ == '__main__':
     parser.add_argument('--val-images-folder', type=str, default='D:/DATASET/COCO2017/images/val2017', help='path to COCO val images folder')
     parser.add_argument('--val-output-name', type=str, default='detections.json',
                         help='name of output json file with detected keypoints')
-    parser.add_argument('--checkpoint-after', type=int, default=1000,
-                        help='number of iterations to save checkpoint')
-    parser.add_argument('--val-after', type=int, default=10000,
-                        help='number of iterations to run validation')
+    parser.add_argument('--checkpoint-after', type=int, default=1000, help='number of iterations to save checkpoint')
+    parser.add_argument('--val-after', type=int, default=10000, help='number of iterations to run validation')
     args = parser.parse_args()
 
     checkpoints_folder = '{}_checkpoints'.format(args.experiment_name)

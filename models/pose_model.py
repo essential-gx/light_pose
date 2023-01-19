@@ -2,7 +2,7 @@ import torch
 from torch import nn
 
 from modules.conv import conv, conv_dw, conv_dw_no_bn
-from .vit_model import ViT_Pose_Model
+from models.vit_module import ViT_Pose_Model
 
 class Cpm(nn.Module):
     def __init__(self, in_channels, out_channels):
@@ -86,11 +86,12 @@ class RefinementStage(nn.Module):
         return [heatmaps, pafs]
 
 
-class PoseEstimationWithMobileNet(nn.Module):
-    def __init__(self, num_refinement_stages=1, num_channels=128, num_heatmaps=19, num_pafs=38,use_ViT=True):
+class PoseEstimationModel(nn.Module):
+    def __init__(self, num_refinement_stages=1, num_channels=128, num_heatmaps=19, num_pafs=38, use_ViT=True):
         super().__init__()
         if use_ViT:
-            self.model = ViT_Pose_Model(img_size=368,patch_size=16,embed_dim=512,depth=12, num_heads=8,use_deconv=False).cuda()
+            self.model = ViT_Pose_Model(img_size=368,patch_size=16,embed_dim=512,depth=12, num_heads=8, use_deconv=False,out_size=46)\
+                .cuda()
         else:
             self.model = nn.Sequential(
                 conv(3, 32, stride=2, bias=False),

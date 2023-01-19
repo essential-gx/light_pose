@@ -6,6 +6,8 @@
 
 ![video](https://cdn.staticaly.com/gh/essential-gx/img@main/test/light_pose_01.gif)
 
+![video2](https://cdn.staticaly.com/gh/essential-gx/img@main/test/s1.gif)
+
 ## 项目配置   
 * 作者开发环境：   
 * Python 3.7   
